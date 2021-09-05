@@ -1,3 +1,4 @@
+// main package that sets up the api routes and initalizes the application.
 package main
 
 import (
@@ -15,6 +16,7 @@ import (
 	"github.com/marvel/constant"
 )
 
+// sets up routing for api controllers and swagger ui.
 func routing() {
 	routes := mux.NewRouter().StrictSlash(true)
 	routes.HandleFunc("/characters", controller.GetAllCharacters)
@@ -22,7 +24,7 @@ func routing() {
 	// Swagger
 	routes.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 
-	log.Fatal(http.ListenAndServe(":9091", routes))
+	log.Fatal(http.ListenAndServe(":" + constant.PORT, routes))
 }
 
 func initialize() {
@@ -59,8 +61,8 @@ func initialize() {
 // @contact.email ahmad.hassan@gmail.com
 func main() {
 	initialize()
-	fmt.Println("\n\n########################################\n" +
-		"Started Marvel characters API successfully!" +
-		"\n########################################")
+	fmt.Printf("\n\n#####################################################################################\n" +
+		"Started Marvel characters API successfully on http://localhost:%s/swagger/index.html" +
+		"\n#####################################################################################\n\n", constant.PORT)
 	routing()
 }

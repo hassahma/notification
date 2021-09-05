@@ -1,5 +1,7 @@
+// package holds a number of constants used within the application.
 package constant
 
+var PORT = "9091"
 var PREFIX = "MARVEL_"
 var MARVEL_URL = "https://gateway.marvel.com/v1/public/characters"
 var SCHEME = "https"

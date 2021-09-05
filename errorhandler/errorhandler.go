@@ -1,3 +1,4 @@
+// handles the error throw in the application
 package errorhandler
 
 import (
@@ -6,6 +7,7 @@ import (
 	"github.com/marvel/model"
 )
 
+// handles the http error responses
 func ErrorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	w.WriteHeader(status)
 	if status == http.StatusNotFound {

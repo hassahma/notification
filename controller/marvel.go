@@ -1,3 +1,4 @@
+// package implements the controller methods for the REST api.
 package controller
 
 import (
