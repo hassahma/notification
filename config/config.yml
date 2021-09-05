@@ -1,0 +1,10 @@
+# redis configurations
+redis:
+  url: "localhost:6379"
+
+# marvel api
+marvel:
+  timestamp: "1"
+  privatekey: "1d724a31e223d1fd04a442b129c66b4b6528b360"
+  apikey: "17c400eff8dafac0184fb02420750089"
+  limit: "100"

@@ -50,3 +50,15 @@ type Output struct {
 	Count int `json:"count"`
 	Results []Characters `json:"results"`
 }
+
+type Config struct {
+	Redis struct {
+		Url string `yaml:"url"`
+	} `yaml:"redis"`
+	Marvel struct {
+		Timestamp string `yaml:"timestamp"`
+		Apikey string `yaml:"apikey"`
+		Privatekey string `yaml:"privatekey"`
+		Limit string `yaml:"limit"`
+	} `yaml:"marvel"`
+}

@@ -11,6 +11,7 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/marvel/controller"
 	"github.com/marvel/cache"
+	"github.com/marvel/utils"
 )
 
 func routing() {
@@ -24,6 +25,7 @@ func routing() {
 }
 
 func init() {
+	utils.Init()
 	strategy := flag.String("s", "TTL", "Cache strategy (TTL or PREFETCH)")
 	flag.Parse()
 

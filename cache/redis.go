@@ -6,6 +6,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/marvel/model"
 	"github.com/marvel/constant"
+	"github.com/marvel/utils"
 	"fmt"
 )
 
@@ -14,7 +15,7 @@ var rdb *redis.Client
 
 func Init() {
 	rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     utils.Cfg.Redis.Url,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
