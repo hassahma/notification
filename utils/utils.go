@@ -6,11 +6,16 @@ import (
 	"net/url"
 	"fmt"
 	"log"
+	"github.com/marvel/constant"
 )
 
 func GetMD5Hash(text string) string {
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])
+}
+
+func GetCharacterIdUrl(id string) string {
+	return constant.MARVEL_URL + "/" + id
 }
 
 func BuildURL(urlStr string, offset string) string {
