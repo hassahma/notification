@@ -1,5 +1,5 @@
 definitions:
-  main.Character:
+  model.Character:
     properties:
       description:
         type: string
@@ -8,7 +8,7 @@ definitions:
       name:
         type: string
     type: object
-  main.HTTPError400:
+  model.HTTPError400:
     properties:
       code:
         example: 400
@@ -17,7 +17,7 @@ definitions:
         example: status bad request
         type: string
     type: object
-  main.HTTPError404:
+  model.HTTPError404:
     properties:
       code:
         example: 404
@@ -26,7 +26,7 @@ definitions:
         example: Not Found
         type: string
     type: object
-  main.HTTPError500:
+  model.HTTPError500:
     properties:
       code:
         example: 500
@@ -58,15 +58,16 @@ paths:
           schema:
             items:
               type: integer
+              example: 1010674
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/main.HTTPError400'
+            $ref: '#/definitions/model.HTTPError400'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/main.HTTPError500'
+            $ref: '#/definitions/model.HTTPError500'
       summary: Serves an endpoint /characters that returns all the Marvel character
         ids in a JSON array of numbers.
       tags:
@@ -89,19 +90,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Character'
+            $ref: '#/definitions/model.Character'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/main.HTTPError400'
+            $ref: '#/definitions/model.HTTPError400'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/main.HTTPError404'
+            $ref: '#/definitions/model.HTTPError404'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/main.HTTPError500'
+            $ref: '#/definitions/model.HTTPError500'
       summary: Gets the details of a particular Marvel character
       tags:
       - Characters

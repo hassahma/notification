@@ -17,8 +17,8 @@ import (
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} int
-// @Failure 400 {object} HTTPError400
-// @Failure 500 {object} HTTPError500
+// @Failure 400 {object} model.HTTPError400
+// @Failure 500 {object} model.HTTPError500
 // @Router /characters [get]
 func GetAllCharacters(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get all characters")
@@ -32,10 +32,10 @@ func GetAllCharacters(w http.ResponseWriter, r *http.Request) {
 // @Accept  json
 // @Produce  json
 // @Param characterId path int true "ID of the character"
-// @Success 200 {object} Character
-// @Failure 400 {object} HTTPError400
-// @Failure 404 {object} HTTPError404
-// @Failure 500 {object} HTTPError500
+// @Success 200 {object} model.Character
+// @Failure 400 {object} model.HTTPError400
+// @Failure 404 {object} model.HTTPError404
+// @Failure 500 {object} model.HTTPError500
 // @Router /characters/{characterId} [get]
 func GetCharacterById(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get character by ID")

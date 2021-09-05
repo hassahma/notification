@@ -59,7 +59,7 @@ func init() {
 // @contact.email ahmad.hassan@gmail.com
 func main() {
 	fmt.Println("\n\n########################################\n" +
-		"Welcome to Marvel characters!" +
+		"Started Marvel characters API successfully!" +
 		"\n########################################")
 	routing()
 }

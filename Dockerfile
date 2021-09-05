@@ -19,7 +19,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /marvel
 FROM golang:1.17-alpine
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /
+WORKDIR /marvel
 
 # Copy the pre-built binary file from the previous stage
 COPY --from=builder /root /marvel
@@ -27,4 +27,4 @@ COPY --from=builder /root /marvel
 EXPOSE 9091
 
 # Run
-CMD [ "go", "run", "/marvel/*.go" ]
+CMD [ "go", "run", "main.go" ]

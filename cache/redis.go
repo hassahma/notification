@@ -8,14 +8,20 @@ import (
 	"github.com/marvel/constant"
 	"github.com/marvel/utils"
 	"fmt"
+	"os"
 )
 
 
 var rdb *redis.Client
 
 func Init() {
+	redis_url := os.Getenv("REDIS_DOCKER")
+	if len(redis_url) == 0  {
+		redis_url = utils.Cfg.Redis.Url
+	}
+	fmt.Println("\n Using redis: ", redis_url)
 	rdb = redis.NewClient(&redis.Options{
-		Addr:     utils.Cfg.Redis.Url,
+		Addr:     redis_url,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})

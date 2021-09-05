@@ -47,20 +47,21 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "integer"
+                                "type": "integer",
+								"example": 1010674
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/main.HTTPError400"
+                            "$ref": "#/definitions/model.HTTPError400"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/main.HTTPError500"
+                            "$ref": "#/definitions/model.HTTPError500"
                         }
                     }
                 }
@@ -92,25 +93,25 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Character"
+                            "$ref": "#/definitions/model.Character"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/main.HTTPError400"
+                            "$ref": "#/definitions/model.HTTPError400"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/main.HTTPError404"
+                            "$ref": "#/definitions/model.HTTPError404"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/main.HTTPError500"
+                            "$ref": "#/definitions/model.HTTPError500"
                         }
                     }
                 }
@@ -118,7 +119,7 @@ var doc = `{
         }
     },
     "definitions": {
-        "main.Character": {
+        "model.Character": {
             "type": "object",
             "properties": {
                 "description": {
@@ -132,7 +133,7 @@ var doc = `{
                 }
             }
         },
-        "main.HTTPError400": {
+        "model.HTTPError400": {
             "type": "object",
             "properties": {
                 "code": {
@@ -145,7 +146,7 @@ var doc = `{
                 }
             }
         },
-        "main.HTTPError404": {
+        "model.HTTPError404": {
             "type": "object",
             "properties": {
                 "code": {
@@ -158,7 +159,7 @@ var doc = `{
                 }
             }
         },
-        "main.HTTPError500": {
+        "model.HTTPError500": {
             "type": "object",
             "properties": {
                 "code": {
