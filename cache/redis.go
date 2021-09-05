@@ -1,43 +1,57 @@
 package cache
 
 import (
-"time"
+	"context"
 	"encoding/json"
-r "gopkg.in/redis.v5"
+	"github.com/go-redis/redis/v8"
+	"github.com/marvel/model"
+	"fmt"
 )
 
-var preffix = "MARVEL_CHARACTERS_"
+var PREFIX = "MARVEL_"
 
-type Storage struct {
-	client *r.Client
+var rdb *redis.Client
+
+func Init() {
+	rdb = redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
 }
 
-//NewStorage creates a new redis storage
-func NewStorage(url string) (*Storage, error) {
-	var (
-		opts *r.Options
-		err  error
-	)
-
-	if opts, err = r.ParseURL(url); err != nil {
-		return nil, err
-	}
-
-	return &Storage{
-		client: r.NewClient(opts),
-	}, nil
+func Exists(key string) bool {
+	var ctx = context.Background()
+	return rdb.Exists(ctx, PREFIX+key).Val() != 0
 }
 
-//Get a cached content by key
-func (s Storage) Get(key string) []byte {
-	val, _ := s.client.Get(preffix + key).Bytes()
-	return val
+func DeleteAll() {
+	var ctx = context.Background()
+	rdb.FlushAll(ctx)
 }
 
-//Set a cached content by key
-func (s Storage) Set(key string, value interface{}, duration time.Duration) {
-	p, err := json.Marshal(value)
+func Get(key string) model.Response {
+	var ctx = context.Background()
+
+	val, err := rdb.Get(ctx, PREFIX+key).Result()
 	if err != nil {
+		fmt.Println(err)
 	}
-	s.client.Set(preffix+key, p, duration)
+	var res model.Response
+
+	json.Unmarshal([]byte(val), &res)
+	return res
+}
+
+func Set(key string, responseObject model.Response) interface{} {
+	var ctx = context.Background()
+
+	var err error
+
+	b, err := json.Marshal(responseObject)
+	err = rdb.Set(ctx, PREFIX+key, b, 0).Err()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return err
 }

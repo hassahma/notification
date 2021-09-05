@@ -10,7 +10,8 @@ import (
 	_ "github.com/marvel/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/marvel/controller"
-	)
+	"github.com/marvel/cache"
+)
 
 func routing() {
 	routes := mux.NewRouter().StrictSlash(true)
@@ -27,6 +28,7 @@ func init() {
 	flag.Parse()
 
 	fmt.Println("Caching Strategy is ", *strategy)
+	cache.Init()
 	if *strategy != "TTL" && *strategy != "PREFETCH" {
 		panic(fmt.Sprintf("\n#######################################################################################\n" +
 			"Invalid cache strategy '%s'. Supported cache strategies are TTL or PREFETCH" +
