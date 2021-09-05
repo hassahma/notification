@@ -14,10 +14,11 @@ import (
 )
 
 var Cfg model.Config
-var Strategy *string
+var defaultstrategy = "PREFETCH"
+var Strategy *string = &defaultstrategy
 
-func Init () {
-	ReadFile(&Cfg)
+func Init (path string) {
+	ReadFile(&Cfg, path)
 	fmt.Printf("\nLoaded configuration %+v\n\n", Cfg)
 }
 
@@ -55,8 +56,8 @@ func processError(err error) {
 	os.Exit(2)
 }
 
-func ReadFile(cfg *model.Config) {
-	f, err := os.Open("config/config.yml")
+func ReadFile(cfg *model.Config, path string) {
+	f, err := os.Open(path)
 	if err != nil {
 		processError(err)
 	}

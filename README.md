@@ -2,7 +2,13 @@
 # Welcome to Marvel Characters API!    
  **Author: Dr Ahmad Hassan**      
  **Description** The Marvel Comics API to browse through the list of characters.      
-      
+ **Features** 
+  - GET /character 
+  - GET /character/{id}
+  - Swagger UI
+  - Docker Compose for building service and backing service i.e. redis
+  - Test suite including controller tests
+  
   **Caching Strategies**    
  I have implemented two caching strategies which are known as **TTL** and **PREFETCH**    
       
@@ -60,5 +66,24 @@ go get github.com/robfig/cron/v3
  http://localhost:9091/swagger/index.html
  
  ** Tests **
- 
- ```go test ./...```
+docker-compose up redis 
+go clean -testcache 
+go test -v ./...
+
+** Test Report **
+PASS
+ok  	github.com/marvel/controller	2.006s
+=== RUN   TestHTTPError400
+--- PASS: TestHTTPError400 (0.00s)
+=== RUN   TestHTTPError404
+--- PASS: TestHTTPError404 (0.00s)
+=== RUN   TestHTTPError500
+--- PASS: TestHTTPError500 (0.00s)
+PASS
+ok  	github.com/marvel/model	0.267s
+=== RUN   TestGetMD5Hash
+--- PASS: TestGetMD5Hash (0.00s)
+=== RUN   TestGetCharacterIdUrl
+--- PASS: TestGetCharacterIdUrl (0.00s)
+PASS
+ok  	github.com/marvel/utils	0.456s

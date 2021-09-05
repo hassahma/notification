@@ -25,12 +25,12 @@ func routing() {
 	log.Fatal(http.ListenAndServe(":9091", routes))
 }
 
-func init() {
-	utils.Init()
+func initialize() {
+	utils.Init("config/config.yml")
 	utils.Strategy = flag.String("s", "PREFETCH", "Cache strategy (TTL or PREFETCH)")
 	flag.Parse()
-
 	cache.Init()
+
 	if *utils.Strategy == "TTL" {
 		fmt.Printf("Caching Strategy is %s. %s\n", *utils.Strategy, constant.TTL)
 	} else if *utils.Strategy == "PREFETCH" {
@@ -58,6 +58,7 @@ func init() {
 // @contact.url https://www.linkedin.com/in/ahmadhassan
 // @contact.email ahmad.hassan@gmail.com
 func main() {
+	initialize()
 	fmt.Println("\n\n########################################\n" +
 		"Started Marvel characters API successfully!" +
 		"\n########################################")
