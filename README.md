@@ -20,6 +20,7 @@
  1. **FAST and EASY WAY TO START API using docker-compose**  
   
 	  ```docker-compose up --build```  
+	  
   2. **Manual way of running API** If you are still keen on running the API manually, then please follow the following steps to run the application    
     
    **Go version**    
@@ -27,9 +28,11 @@
  1.17 darwin/amd64      
          
    **Install routing package gorilla/mux** 
+   
 	   ```go get -v -u github.com/gorilla/mux```      
          
    **Install go-redis** 
+   
    ```go get github.com/go-redis/redis ```     
          
    **Install cron**   
@@ -45,7 +48,7 @@ go get github.com/robfig/cron/v3
    ```  
   **Run redis container**  
   ```  
- docker-compose up redis    ```  
+ docker-compose up redis  
  ```
   **Run**   
   
