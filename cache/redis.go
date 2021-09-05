@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis/v8"
 	"github.com/marvel/model"
+	"github.com/marvel/constant"
 	"fmt"
 )
 
-var PREFIX = "MARVEL_"
 
 var rdb *redis.Client
 
@@ -22,7 +22,7 @@ func Init() {
 
 func Exists(key string) bool {
 	var ctx = context.Background()
-	return rdb.Exists(ctx, PREFIX+key).Val() != 0
+	return rdb.Exists(ctx, constant.PREFIX + key).Val() != 0
 }
 
 func DeleteAll() {
@@ -33,7 +33,7 @@ func DeleteAll() {
 func Get(key string) model.Response {
 	var ctx = context.Background()
 
-	val, err := rdb.Get(ctx, PREFIX+key).Result()
+	val, err := rdb.Get(ctx, constant.PREFIX + key).Result()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -49,7 +49,7 @@ func Set(key string, responseObject model.Response) interface{} {
 	var err error
 
 	b, err := json.Marshal(responseObject)
-	err = rdb.Set(ctx, PREFIX+key, b, 0).Err()
+	err = rdb.Set(ctx, constant.PREFIX + key, b, 0).Err()
 	if err != nil {
 		fmt.Println(err)
 	}
