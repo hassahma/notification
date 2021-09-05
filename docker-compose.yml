@@ -6,3 +6,13 @@ services:
     container_name: marvel_redis
     ports:
       - "6379:6379"
+  marvel_docker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    networks:
+      - default
+    ports:
+      - "9091:9091"
