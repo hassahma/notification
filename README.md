@@ -29,7 +29,7 @@
          
    **Install routing package gorilla/mux** 
    
-	   ```go get -v -u github.com/gorilla/mux```      
+    go get -v -u github.com/gorilla/mux      
          
    **Install go-redis** 
    
