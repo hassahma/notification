@@ -20,7 +20,7 @@ func Init() {
 	if len(redis_url) == 0  {
 		redis_url = utils.Cfg.Redis.Url
 	}
-	fmt.Println("\n Using redis: ", redis_url)
+	fmt.Println("\nUsing redis: ", redis_url)
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     redis_url,
 		Password: "", // no password set

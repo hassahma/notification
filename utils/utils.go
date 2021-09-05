@@ -17,6 +17,7 @@ import (
 var Cfg model.Config
 var defaultstrategy = "PREFETCH"
 var Strategy *string = &defaultstrategy
+var Loop = 1
 
 // initializes the application
 func Init (path string) {

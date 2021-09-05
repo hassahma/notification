@@ -27,4 +27,4 @@ COPY --from=builder /root /marvel
 EXPOSE 9091
 
 # Run
-CMD [ "go", "run", "main.go" ]
+CMD [ "go", "run", "main.go" , "-s", "PREFETCH"]

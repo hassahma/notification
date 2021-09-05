@@ -22,8 +22,8 @@ func TestHTTPError404(t *testing.T) {
 
 // tests the struct representing the http error 500
 func TestHTTPError500(t *testing.T) {
-	hTTPError500 := HTTPError400{500, "internel server error"}
+	hTTPError500 := HTTPError400{500, "error"}
 	testutil.AssertEqual(t, hTTPError500.Code, 500)
-	testutil.AssertEqual(t, hTTPError500.Message, "internal server error")
+	testutil.AssertEqual(t, hTTPError500.Message, "error")
 }
 

@@ -6,6 +6,7 @@
   - GET /character 
   - GET /character/{id}
   - Swagger UI
+  - Two caching strategies 1) PREFETCH 2) Time To Live (TTL)
   - Docker Compose for building service and backing service i.e. redis
   - Test suite including controller tests
   
@@ -13,7 +14,7 @@
  I have implemented two caching strategies which are known as **TTL** and **PREFETCH**    
       
  1. **PREFETCH**     
- In PREFETCH caching strategy, the cache keys will have no cache expiry and cache will automatically be populated by pre-fetching with latest copy of the data after the configured time in config.yml. The default caching strategy is PREFETCH. The API can be started with PREFETCH as follows:    
+ In PREFETCH caching strategy, the cache keys will have no cache expiry and cache will automatically be populated by pre-fetching with latest copy of the data after the configured time in config.yml. The default caching strategy is PREFETCH. By default, the pre-fetching happens every 5 minute as defined in config.yml. The API can be started with PREFETCH as follows:    
     - go run main.go -s PREFETCH    
     
  2. **TTL**    
@@ -25,7 +26,9 @@
  **How to RUN**  
  1. **FAST and EASY WAY TO START API using docker-compose**  
   
-	  ```docker-compose up --build```  
+	  ```docker-compose up --build``` 
+	  
+	  By default, it runs using the PREFETCH strategy, if you want to run TTL strategy then change the Dockerfile to specify TTL 
 	  
   2. **Manual way of running API** If you are still keen on running the API manually, then please follow the following steps to run the application    
     
@@ -63,14 +66,16 @@ go get github.com/robfig/cron/v3
  
 
 **Open browser**
- http://localhost:9091/swagger/index.html
+http://localhost:9091/swagger/index.html
  
- ** Tests **
+**Tests**
+ 
 docker-compose up redis 
 go clean -testcache 
 go test -v ./...
 
-** Test Report **
+**Test Report**
+
 PASS
 ok  	github.com/marvel/controller	2.006s
 === RUN   TestHTTPError400

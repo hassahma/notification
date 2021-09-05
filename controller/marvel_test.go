@@ -13,6 +13,7 @@ import (
 )
 
 func setup() {
+	utils.Loop = 0
 	utils.Init("../config/config.yml")
 	cache.Init()
 }
@@ -79,5 +80,22 @@ func TestGetCharactersById(t *testing.T) {
 			`response body "%s" is empty!"`,
 			wr.Body.String(),
 		)
+	}
+}
+
+func TestGetCharactersById404(t *testing.T) {
+
+	setup()
+
+	wr := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/characters/", nil)
+
+	vars := map[string]string{
+		"id": "non_existing_id",
+	}
+	req = mux.SetURLVars(req, vars)
+	GetCharacterById(wr, req)
+	if wr.Code != http.StatusNotFound {
+		t.Errorf("got HTTP status code %d, expected 200", wr.Code)
 	}
 }

@@ -28,6 +28,10 @@ func fetch() []int {
 	output := make([]int, 0)
 	output = concatOutput(responseObject, output)
 
+	if utils.Loop != 1 {
+		return output
+	}
+
 	i := 0
 	for {
 		i = i + 1
