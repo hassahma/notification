@@ -1,5 +1,8 @@
 package model
 
+import (
+	"time"
+)
 // HTTPError
 type HTTPError400 struct {
 	Code    int    `json:"code" example:"400"`
@@ -60,5 +63,7 @@ type Config struct {
 		Apikey string `yaml:"apikey"`
 		Privatekey string `yaml:"privatekey"`
 		Limit string `yaml:"limit"`
+		TTL time.Duration `yaml:"TTL"`
+		PREFETCH int `yaml:"PREFETCH"`
 	} `yaml:"marvel"`
 }

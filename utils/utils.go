@@ -9,10 +9,13 @@ import (
 	"github.com/marvel/constant"
 	"github.com/marvel/model"
 	"os"
+	"time"
 	"gopkg.in/yaml.v2"
 )
 
 var Cfg model.Config
+var Strategy *string
+
 func Init () {
 	ReadFile(&Cfg)
 	fmt.Printf("\nLoaded configuration %+v\n\n", Cfg)
@@ -28,15 +31,12 @@ func GetCharacterIdUrl(id string) string {
 }
 
 func BuildURL(urlStr string, offset string) string {
-	//ts := "1"
-	//apikey := "17c400eff8dafac0184fb02420750089"
-	//privateKey := "1d724a31e223d1fd04a442b129c66b4b6528b360"
 	url, err := url.Parse(urlStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	url.Scheme = "https"
+	url.Scheme = constant.SCHEME
 	queryparams := url.Query()
 	queryparams.Set("ts", Cfg.Marvel.Timestamp)
 	queryparams.Set("apikey", Cfg.Marvel.Apikey)
@@ -67,4 +67,12 @@ func ReadFile(cfg *model.Config) {
 	if err != nil {
 		processError(err)
 	}
+}
+
+func GetExpirationBasedOnStrategy() time.Duration {
+	if *Strategy == "TTL"{
+		return Cfg.Marvel.TTL * time.Minute
+	}
+
+	return 0
 }

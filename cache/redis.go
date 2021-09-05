@@ -50,7 +50,7 @@ func Set(key string, responseObject model.Response) interface{} {
 	var err error
 
 	b, err := json.Marshal(responseObject)
-	err = rdb.Set(ctx, constant.PREFIX + key, b, 0).Err()
+	err = rdb.Set(ctx, constant.PREFIX + key, b, utils.GetExpirationBasedOnStrategy()).Err()
 	if err != nil {
 		fmt.Println(err)
 	}

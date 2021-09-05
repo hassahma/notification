@@ -12,6 +12,7 @@ import (
 	"github.com/marvel/controller"
 	"github.com/marvel/cache"
 	"github.com/marvel/utils"
+	"github.com/marvel/constant"
 )
 
 func routing() {
@@ -26,20 +27,24 @@ func routing() {
 
 func init() {
 	utils.Init()
-	strategy := flag.String("s", "TTL", "Cache strategy (TTL or PREFETCH)")
+	utils.Strategy = flag.String("s", "PREFETCH", "Cache strategy (TTL or PREFETCH)")
 	flag.Parse()
 
-	fmt.Println("Caching Strategy is ", *strategy)
 	cache.Init()
-	if *strategy != "TTL" && *strategy != "PREFETCH" {
-		panic(fmt.Sprintf("\n#######################################################################################\n" +
-			"Invalid cache strategy '%s'. Supported cache strategies are TTL or PREFETCH" +
-			"\n#######################################################################################\n", *strategy))
+	if *utils.Strategy == "TTL" {
+		fmt.Printf("Caching Strategy is %s. %s\n", *utils.Strategy, constant.TTL)
+	} else if *utils.Strategy == "PREFETCH" {
+		fmt.Printf("Caching Strategy is %s. %s\n", *utils.Strategy, constant.PREFETCH)
+	} else {
+		panic(fmt.Sprintf("\n#######################################################################################\n"+
+			"Invalid cache strategy '%s'. Supported cache strategies are TTL or PREFETCH. %s %s"+
+			"\n#######################################################################################\n", *utils.Strategy, constant.TTL, constant.PREFETCH))
 	}
 
-	if *strategy == "PREFETCH" {
+	if *utils.Strategy == "PREFETCH" {
 		c := cron.New(cron.WithSeconds())
-		c.AddFunc("@every 15m", controller.InvalidateAndRefresh)
+		fmt.Printf("\nUsing cache prefetch time of %d minute.\n", utils.Cfg.Marvel.PREFETCH)
+		c.AddFunc(fmt.Sprintf("@every %dm", utils.Cfg.Marvel.PREFETCH), controller.InvalidateAndRefresh)
 		c.Start()
 	}
 }
