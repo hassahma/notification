@@ -1,9 +1,7 @@
-package main
+package controller
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
@@ -13,16 +11,13 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"github.com/marvel/errorhandler"
+	"github.com/marvel/utils"
 )
 
 var marvel_url = "https://gateway.marvel.com/v1/public/characters"
 
-func getMD5Hash(text string) string {
-	hash := md5.Sum([]byte(text))
-	return hex.EncodeToString(hash[:])
-}
 
-var storage CacheInterface
 
 var rdb = redis.NewClient(&redis.Options{
 	Addr:     "localhost:6379",
@@ -43,7 +38,7 @@ func buildURL(urlStr string, offset string) string {
 	queryparams := url.Query()
 	queryparams.Set("ts", ts)
 	queryparams.Set("apikey", apikey)
-	queryparams.Set("hash", getMD5Hash(ts+privateKey+apikey))
+	queryparams.Set("hash", utils.GetMD5Hash(ts+privateKey+apikey))
 	queryparams.Set("limit", "100")
 	queryparams.Set("offset", offset)
 
@@ -86,24 +81,6 @@ type Output struct {
 	Results []Characters `json:"results"`
 }
 
-// HTTPError
-type HTTPError400 struct {
-	Code    int    `json:"code" example:"400"`
-	Message string `json:"message" example:"status bad request"`
-}
-
-// HTTPError
-type HTTPError404 struct {
-	Code    int    `json:"code" example:"404"`
-	Message string `json:"message" example:"Not Found"`
-}
-
-// HTTPError
-type HTTPError500 struct {
-	Code    int    `json:"code" example:"500"`
-	Message string `json:"message" example:"Internal Server Error"`
-}
-
 // GetAllCharacters godoc
 // @Summary Serves an endpoint /characters that returns all the Marvel character ids in a JSON array of numbers.
 // @Description Returns the IDs of all the Marvel Characters.
@@ -114,15 +91,15 @@ type HTTPError500 struct {
 // @Failure 400 {object} HTTPError400
 // @Failure 500 {object} HTTPError500
 // @Router /characters [get]
-func getAllCharacters (w http.ResponseWriter, r *http.Request) {
+func GetAllCharacters (w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get all characters")
 	json.NewEncoder(w).Encode(fetch())
 }
 
-func invalidateAndRefresh(){
-	fmt.Println("invalidating cache")
+func InvalidateAndRefresh(){
+	fmt.Println("Invalidating cache")
 	deleteAll()
-	fmt.Println("prefetch cache")
+	fmt.Println("Prefetching cache")
 	fetch()
 }
 func fetch() []int {
@@ -237,22 +214,12 @@ func queryMarvelApi(url string) (Response, bool) {
 // @Failure 404 {object} HTTPError404
 // @Failure 500 {object} HTTPError500
 // @Router /characters/{characterId} [get]
-func getCharacterById (w http.ResponseWriter, r *http.Request)  {
+func GetCharacterById (w http.ResponseWriter, r *http.Request)  {
 	vars := mux.Vars(r)
 	responseObject, _ := queryMarvelApi(buildURL(marvel_url + "/"+vars["id"], strconv.Itoa(0)))
 	if responseObject.Code == http.StatusNotFound {
-		errorHandler(w, r, responseObject.Code)
+		errorhandler.ErrorHandler(w, r, responseObject.Code)
 		return
 	}
 	json.NewEncoder(w).Encode(responseObject.Data.Results[0])
-}
-
-func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
-	w.WriteHeader(status)
-	if status == http.StatusNotFound {
-		var response HTTPError404
-		response.Code = status
-		response.Message = "Not Found"
-		fmt.Fprint(w, response)
-	}
 }
