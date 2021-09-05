@@ -17,3 +17,36 @@ type HTTPError500 struct {
 	Code    int    `json:"code" example:"500"`
 	Message string `json:"message" example:"Internal Server Error"`
 }
+
+type Character struct {
+	Id int `json:"id"`
+	Name string `json:"name"`
+	Description string `json:"description"`
+}
+
+type Characters struct {
+	Id int `json:"id"`
+}
+
+type Response struct {
+	Code int    `json:"code"`
+	Status string  `json:"status"`
+	Data Data `json:"data"`
+
+}
+
+type Data struct {
+	Offset int `json:"offset"`
+	Limit int `json:"limit"`
+	Total int `json:"total"`
+	Count int `json:"count"`
+	Results []Character `json:"results"`
+}
+
+type Output struct {
+	Offset int `json:"offset"`
+	Limit int `json:"limit"`
+	Total int `json:"total"`
+	Count int `json:"count"`
+	Results []Characters `json:"results"`
+}

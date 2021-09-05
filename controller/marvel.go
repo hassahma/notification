@@ -9,15 +9,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"strconv"
 	"github.com/marvel/errorhandler"
 	"github.com/marvel/utils"
+	"github.com/marvel/model"
 )
 
 var marvel_url = "https://gateway.marvel.com/v1/public/characters"
-
-
 
 var rdb = redis.NewClient(&redis.Options{
 	Addr:     "localhost:6379",
@@ -25,61 +23,7 @@ var rdb = redis.NewClient(&redis.Options{
 	DB:       0,  // use default DB
 })
 
-func buildURL(urlStr string, offset string) string {
-	ts := "1"
-	apikey := "17c400eff8dafac0184fb02420750089"
-	privateKey := "1d724a31e223d1fd04a442b129c66b4b6528b360"
-	url, err := url.Parse(urlStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	url.Scheme = "https"
-	queryparams := url.Query()
-	queryparams.Set("ts", ts)
-	queryparams.Set("apikey", apikey)
-	queryparams.Set("hash", utils.GetMD5Hash(ts+privateKey+apikey))
-	queryparams.Set("limit", "100")
-	queryparams.Set("offset", offset)
-
-	url.RawQuery = queryparams.Encode()
-	fmt.Println("query is " + url.String())
-	return url.String()
-}
-type Character struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-}
-
-type Characters struct {
-	Id int `json:"id"`
-}
-var characters [] Character
-
-
-type Response struct {
-	Code int    `json:"code"`
-	Status string  `json:"status"`
-	Data Data `json:"data"`
-
-}
-
-type Data struct {
-	Offset int `json:"offset"`
-	Limit int `json:"limit"`
-	Total int `json:"total"`
-	Count int `json:"count"`
-	Results []Character `json:"results"`
-}
-
-type Output struct {
-	Offset int `json:"offset"`
-	Limit int `json:"limit"`
-	Total int `json:"total"`
-	Count int `json:"count"`
-	Results []Characters `json:"results"`
-}
+var characters []model.Character
 
 // GetAllCharacters godoc
 // @Summary Serves an endpoint /characters that returns all the Marvel character ids in a JSON array of numbers.
@@ -91,30 +35,27 @@ type Output struct {
 // @Failure 400 {object} HTTPError400
 // @Failure 500 {object} HTTPError500
 // @Router /characters [get]
-func GetAllCharacters (w http.ResponseWriter, r *http.Request) {
+func GetAllCharacters(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Get all characters")
 	json.NewEncoder(w).Encode(fetch())
 }
 
-func InvalidateAndRefresh(){
-	fmt.Println("Invalidating cache")
+func InvalidateAndRefresh() {
+	fmt.Println("Invalidating and Prefetching cache")
 	deleteAll()
-	fmt.Println("Prefetching cache")
 	fetch()
 }
-func fetch() []int {
-	url := buildURL(marvel_url, strconv.Itoa(0))
-	responseObject := caching(url)
-	fmt.Println("responseObject ", responseObject)
 
+func fetch() []int {
+	url := utils.BuildURL(marvel_url, strconv.Itoa(0))
+	responseObject := caching(url)
 	output := make([]int, 0)
 	output = concatOutput(responseObject, output)
-	fmt.Println("output len ", len(output), " output ", output)
 
 	i := 0
 	for {
 		i = i + 1
-		url := buildURL(marvel_url, strconv.Itoa(i*100))
+		url := utils.BuildURL(marvel_url, strconv.Itoa(i*100))
 		responseObject := caching(url)
 		output = concatOutput(responseObject, output)
 		if len(output) == responseObject.Data.Total {
@@ -124,14 +65,14 @@ func fetch() []int {
 	return output
 }
 
-func caching(url string) Response {
-	var responseObject Response
+func caching(url string) model.Response {
+	var responseObject model.Response
 	if exists(url) {
-		fmt.Println("cache hit")
+		fmt.Println("Cache hit")
 		responseObject = get(url)
 		return responseObject
 	} else {
-		fmt.Println("cache miss")
+		fmt.Println("Cache miss")
 		responseObject, done := queryMarvelApi(url)
 		if done {
 			//return
@@ -142,6 +83,7 @@ func caching(url string) Response {
 }
 
 var PREFIX = "MARVEL_"
+
 func exists(key string) bool {
 	var ctx = context.Background()
 	return rdb.Exists(ctx, PREFIX+key).Val() != 0
@@ -152,20 +94,20 @@ func deleteAll() {
 	rdb.FlushAll(ctx)
 }
 
-func get(key string) Response {
+func get(key string) model.Response {
 	var ctx = context.Background()
 
 	val, err := rdb.Get(ctx, PREFIX+key).Result()
 	if err != nil {
 		fmt.Println(err)
 	}
-	var res Response
+	var res model.Response
 
 	json.Unmarshal([]byte(val), &res)
 	return res
 }
 
-func set(key string, responseObject Response) interface{} {
+func set(key string, responseObject model.Response) interface{} {
 	var ctx = context.Background()
 
 	var err error
@@ -178,18 +120,18 @@ func set(key string, responseObject Response) interface{} {
 	return err
 }
 
-func concatOutput(responseObject Response, output []int) []int {
+func concatOutput(responseObject model.Response, output []int) []int {
 	for _, result := range responseObject.Data.Results {
 		output = append(output, result.Id)
 	}
 	return output
 }
 
-func queryMarvelApi(url string) (Response, bool) {
+func queryMarvelApi(url string) (model.Response, bool) {
 	response, err := http.Get(url)
 	if err != nil {
 		fmt.Println(err)
-		return Response{}, true
+		return model.Response{}, true
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
@@ -197,7 +139,7 @@ func queryMarvelApi(url string) (Response, bool) {
 		log.Fatal(err)
 	}
 
-	var responseObject Response
+	var responseObject model.Response
 	json.Unmarshal(responseData, &responseObject)
 	return responseObject, false
 }
@@ -214,9 +156,9 @@ func queryMarvelApi(url string) (Response, bool) {
 // @Failure 404 {object} HTTPError404
 // @Failure 500 {object} HTTPError500
 // @Router /characters/{characterId} [get]
-func GetCharacterById (w http.ResponseWriter, r *http.Request)  {
+func GetCharacterById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	responseObject, _ := queryMarvelApi(buildURL(marvel_url + "/"+vars["id"], strconv.Itoa(0)))
+	responseObject, _ := queryMarvelApi(utils.BuildURL(marvel_url+"/"+vars["id"], strconv.Itoa(0)))
 	if responseObject.Code == http.StatusNotFound {
 		errorhandler.ErrorHandler(w, r, responseObject.Code)
 		return
