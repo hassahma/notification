@@ -1,0 +1,108 @@
+definitions:
+  main.Character:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  main.HTTPError400:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  main.HTTPError404:
+    properties:
+      code:
+        example: 404
+        type: integer
+      message:
+        example: Not Found
+        type: string
+    type: object
+  main.HTTPError500:
+    properties:
+      code:
+        example: 500
+        type: integer
+      message:
+        example: Internal Server Error
+        type: string
+    type: object
+info:
+  contact:
+    email: ahmad.hassan@gmail.com
+    name: Dr Ahmad Hassan
+    url: https://www.linkedin.com/in/ahmadhassan
+  description: This is an api for querying the Marvel characters.
+  termsOfService: http://swagger.io/terms/
+  title: Marvel Characters API
+  version: "1.0"
+paths:
+  /characters:
+    get:
+      consumes:
+      - application/json
+      description: Returns the IDs of all the Marvel Characters.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: integer
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError400'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError500'
+      summary: Serves an endpoint /characters that returns all the Marvel character
+        ids in a JSON array of numbers.
+      tags:
+      - Characters
+  /characters/{characterId}:
+    get:
+      consumes:
+      - application/json
+      description: Serve an endpoint /characters/{characterId} that returns only the
+        id, name and description of the character.
+      parameters:
+      - description: ID of the character
+        in: path
+        name: characterId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Character'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError400'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError404'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError500'
+      summary: Gets the details of a particular Marvel character
+      tags:
+      - Characters
+swagger: "2.0"
