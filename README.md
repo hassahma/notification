@@ -8,11 +8,11 @@ The Marvel Comics API to browse through the list of characters.
     
  1. **PREFETCH**   
  In PREFETCH caching strategy, the cache keys will have no cache expiry and cache will automatically be populated by pre-fetching with latest copy of the data after the configured time in config.yml. The default caching strategy is PREFETCH. The API can be started with PREFETCH as follows:  
- 2. go run *.go -s PREFETCH  
+    -  go run *.go -s PREFETCH  
   
- 3. **TTL**  
+ 2.. **TTL**  
   In TTL caching strategy, the cache keys will automatically expire after the configured TTL in config.yml configuration. Subsequent API requests after the cache expiry will incur the cache miss and re-populate the cache.  
- 4. go run *.go -s TTL  
+    -  go run *.go -s TTL  
   
 **Caching Assumptions**  
 The assumption is that only the Marvel API is using the Redis cache exclusively so we can safely use FLUSHALL to delete all the keys and re-populate the cache by prefetching.  
@@ -41,7 +41,8 @@ If you are still keen on running the API manually, then please follow the follow
 	go get github.com/swaggo/http-swagger    
 	swag init    
 	    
-	**Run redis container** docker-compose up    
+	**Run redis container**
+	docker-compose up redis   
 	    
 	**Run**   
 	 - go run *.go -s PREFETCH     
