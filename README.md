@@ -69,11 +69,11 @@ go get github.com/robfig/cron/v3
 http://localhost:9091/swagger/index.html
  
 **Tests**
- 
+```
 docker-compose up redis 
 go clean -testcache 
 go test -v ./...
-
+```
 **Test Report**
 
 PASS
