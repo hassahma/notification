@@ -1,13 +1,4 @@
 definitions:
-  model.Character:
-    properties:
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
   model.HTTPError400:
     properties:
       code:
@@ -15,15 +6,6 @@ definitions:
         type: integer
       message:
         example: status bad request
-        type: string
-    type: object
-  model.HTTPError404:
-    properties:
-      code:
-        example: 404
-        type: integer
-      message:
-        example: Not Found
         type: string
     type: object
   model.HTTPError500:
@@ -40,26 +22,21 @@ info:
     email: ahmad.hassan@gmail.com
     name: Dr Ahmad Hassan
     url: https://www.linkedin.com/in/ahmadhassan
-  description: This is an api for querying the Marvel characters.
+  description: This is an api for notification service.
   termsOfService: http://swagger.io/terms/
-  title: Marvel Characters API
+  title: Notification API
   version: "1.0"
 paths:
-  /characters:
-    get:
+  /notification/activate:
+    post:
       consumes:
       - application/json
-      description: Returns the IDs of all the Marvel Characters.
+      description: todo
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              type: integer
-              example: 1010674
-            type: array
+        "201":
+          description: ""
         "400":
           description: Bad Request
           schema:
@@ -68,42 +45,60 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/model.HTTPError500'
-      summary: Serves an endpoint /characters that returns all the Marvel character
-        ids in a JSON array of numbers.
+      summary: Activate the notification
       tags:
-      - Characters
-  /characters/{characterId}:
-    get:
+      - Notification
+  /notification/subscribe/{url}:
+    post:
       consumes:
       - application/json
-      description: Serve an endpoint /characters/{characterId} that returns only the
-        id, name and description of the character.
+      description: todo
       parameters:
-      - description: ID of the character
+      - description: The notification url
         in: path
-        name: characterId
+        name: url
+        required: true
+        type: string
+      - description: The id of the customer
+        in: path
+        name: customerId
         required: true
         type: integer
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Character'
+        "201":
+          description: ""
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/model.HTTPError400'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/model.HTTPError404'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/model.HTTPError500'
-      summary: Gets the details of a particular Marvel character
+      summary: Test the notification
       tags:
-      - Characters
+      - Notification
+  /notification/test:
+    post:
+      consumes:
+      - application/json
+      description: todo
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.HTTPError400'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.HTTPError500'
+      summary: Test the notification
+      tags:
+      - Notification
 swagger: "2.0"

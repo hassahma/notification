@@ -28,9 +28,9 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/characters": {
-            "get": {
-                "description": "Returns the IDs of all the Marvel Characters.",
+        "/notification/activate": {
+            "post": {
+                "description": "todo",
                 "consumes": [
                     "application/json"
                 ],
@@ -38,19 +38,12 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Characters"
+                    "Notification"
                 ],
-                "summary": "Serves an endpoint /characters that returns all the Marvel character ids in a JSON array of numbers.",
+                "summary": "Activate the notification",
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "integer",
-								"example": 1010674
-                            }
-                        }
+                    "201": {
+                        "description": ""
                     },
                     "400": {
                         "description": "Bad Request",
@@ -67,9 +60,9 @@ var doc = `{
                 }
             }
         },
-        "/characters/{characterId}": {
-            "get": {
-                "description": "Serve an endpoint /characters/{characterId} that returns only the id, name and description of the character.",
+        "/notification/subscribe/{url}": {
+            "post": {
+                "description": "todo",
                 "consumes": [
                     "application/json"
                 ],
@@ -77,24 +70,28 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Characters"
+                    "Notification"
                 ],
-                "summary": "Gets the details of a particular Marvel character",
+                "summary": "Test the notification",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "The notification url",
+                        "name": "url",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
-                        "description": "ID of the character",
-                        "name": "characterId",
+                        "description": "The id of the customer",
+                        "name": "customerId",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Character"
-                        }
+                    "201": {
+                        "description": ""
                     },
                     "400": {
                         "description": "Bad Request",
@@ -102,10 +99,36 @@ var doc = `{
                             "$ref": "#/definitions/model.HTTPError400"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/model.HTTPError404"
+                            "$ref": "#/definitions/model.HTTPError500"
+                        }
+                    }
+                }
+            }
+        },
+        "/notification/test": {
+            "post": {
+                "description": "todo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Test the notification",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.HTTPError400"
                         }
                     },
                     "500": {
@@ -119,20 +142,6 @@ var doc = `{
         }
     },
     "definitions": {
-        "model.Character": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "model.HTTPError400": {
             "type": "object",
             "properties": {
@@ -143,19 +152,6 @@ var doc = `{
                 "message": {
                     "type": "string",
                     "example": "status bad request"
-                }
-            }
-        },
-        "model.HTTPError404": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer",
-                    "example": 404
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Not Found"
                 }
             }
         },
@@ -190,8 +186,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Marvel Characters API",
-	Description: "This is an api for querying the Marvel characters.",
+	Title:       "Notification API",
+	Description: "This is an api for notification service.",
 }
 
 type s struct{}

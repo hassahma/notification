@@ -1,18 +1,21 @@
 version: '3.7'
 
 services:
-  redis:
-    image: redis:5.0.5
-    container_name: marvel_redis
+  postgres:
+    image: postgres:9.6.16
+    container_name: postgres-notification-service
     ports:
-      - "6379:6379"
-  server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+      - 5432:5432
     environment:
-      REDIS_DOCKER: redis:6379
-    depends_on:
-      - redis
-    ports:
-      - "9091:9091"
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+#  server:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment:
+#      POSTGRES_DOCKER: postgres:5432
+#    depends_on:
+#      - postgres
+#    ports:
+#      - "9091:9091"
