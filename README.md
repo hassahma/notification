@@ -1,27 +1,7 @@
 
-# Welcome to Marvel Characters API!    
+# Welcome to Notification API!    
  **Author: Dr Ahmad Hassan**      
- **Description** The Marvel Comics API to browse through the list of characters.      
- **Features** 
-  - GET /character 
-  - GET /character/{id}
-  - Swagger UI
-  - Two caching strategies 1) PREFETCH 2) Time To Live (TTL)
-  - Docker Compose for building service and backing service i.e. redis
-  - Test suite including controller tests
-  
-  **Caching Strategies**    
- I have implemented two caching strategies which are known as **TTL** and **PREFETCH**    
-      
- 1. **PREFETCH**     
- In PREFETCH caching strategy, the cache keys will have no cache expiry and cache will automatically be populated by pre-fetching with latest copy of the data after the configured time in config.yml. The default caching strategy is PREFETCH. By default, the pre-fetching happens every 5 minute as defined in config.yml. The API can be started with PREFETCH as follows:    
-    - go run main.go -s PREFETCH    
-    
- 2. **TTL**    
- In TTL caching strategy, the cache keys will automatically expire after the configured TTL in config.yml configuration. Subsequent API requests after the cache expiry will incur the cache miss and re-populate the cache.    
-    - go run main.go -s TTL    
-    
-**Caching Assumptions** The assumption is that only the Marvel API is using the Redis cache exclusively so we can safely use FLUSHALL to delete all the keys and re-populate the cache by prefetching.    
+ **Description** The Notification api
    
  **How to RUN**  
  1. **FAST and EASY WAY TO START API using docker-compose**  

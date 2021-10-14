@@ -17,6 +17,7 @@ import (
 // @Failure 500 {object} model.HTTPError500
 // @Param url query string true "The notification url"
 // @Param customerId query int true "The id of the customer"
+// @Param body_param body string true "The payload"
 // @Router /notification/subscribe [post]
 func PostNotify(w http.ResponseWriter, r *http.Request) {
 	saveCustomer(w, r)
