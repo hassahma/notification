@@ -44,7 +44,7 @@
                 }
             }
         },
-        "/notification/subscribe/{url}": {
+        "/notification/subscribe": {
             "post": {
                 "description": "todo",
                 "consumes": [
@@ -62,14 +62,14 @@
                         "type": "string",
                         "description": "The notification url",
                         "name": "url",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "The id of the customer",
                         "name": "customerId",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],

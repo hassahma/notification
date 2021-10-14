@@ -7,16 +7,16 @@ import (
 	"log"
 	"net/http"
 	//"github.com/robfig/cron/v3"
-	_ "github.com/marvel/docs"
+	_ "github.com/hassahma/notification/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"github.com/notification/controller"
-	"github.com/notification/constant"
+	"github.com/hassahma/notification/controller"
+	"github.com/hassahma/notification/constant"
 )
 
 // sets up routing for api controllers and swagger ui.
 func routing() {
 	routes := mux.NewRouter().StrictSlash(true)
-	routes.HandleFunc("/notification/subscribe/{url}", controller.PostNotify).Methods("POST")
+	routes.HandleFunc("/notification/subscribe", controller.PostNotify).Methods("POST")
 	routes.HandleFunc("/notification/test", controller.PostNotifyTest).Methods("POST")
 	routes.HandleFunc("/notification/activate", controller.PostNotifyActivate).Methods("POST")
 

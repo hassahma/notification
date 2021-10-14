@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"github.com/lib/pq"
+	"github.com/gorilla/mux"
 )
 
 const (
@@ -19,12 +20,27 @@ const (
 /*
 CREATE TABLE customer (
 id SERIAL,
-customer_id INT,
+customer_id TEXT,
 notification_url TEXT,
 active BOOL,
+creation_date timestamp,
 PRIMARY KEY(customer_id, notification_url),
-CONSTRAINT no_duplicate_tag UNIQUE (customer_id, notification_url)
+CONSTRAINT no_duplicate_records UNIQUE (customer_id, notification_url),
+CONSTRAINT no_duplicate_id_for_foreign_key_refs UNIQUE (id)
 );
+
+CREATE TABLE notification (
+id SERIAL PRIMARY KEY,
+customer INT,
+customer_key text,
+payload TEXT,
+status TEXT,
+incoming_order INT,
+creation_date timestamp,
+processsed_date timestamp,
+Foreign KEY(customer) references customer(id)
+);
+
 */
 func SaveCustomer(w http.ResponseWriter, r *http.Request) {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
@@ -36,12 +52,20 @@ func SaveCustomer(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
+	vars :=  r.URL.Query()
+
+	customerId := vars["customerId"]
+	url := vars["url"]
+	fmt.Println("url:", url)
+	fmt.Println("customer id:", customerId)
+	fmt.Println("request body:", r.Body)
+
 	sqlStatement := `
 					INSERT INTO customer (customer_id, notification_url, active)
 					VALUES ($1, $2, $3)
 					RETURNING id`
 	id := 0
-	err = db.QueryRow(sqlStatement, 30, "jon@calhoun.io", false).Scan(&id)
+	err = db.QueryRow(sqlStatement, customerId, url, false).Scan(&id)
 	if err != nil {
 		log.Println("DB error: ", err)
 		pqErr := err.(*pq.Error)

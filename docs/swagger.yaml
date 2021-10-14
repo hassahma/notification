@@ -48,19 +48,19 @@ paths:
       summary: Activate the notification
       tags:
       - Notification
-  /notification/subscribe/{url}:
+  /notification/subscribe:
     post:
       consumes:
       - application/json
       description: todo
       parameters:
       - description: The notification url
-        in: path
+        in: query
         name: url
         required: true
         type: string
       - description: The id of the customer
-        in: path
+        in: query
         name: customerId
         required: true
         type: integer

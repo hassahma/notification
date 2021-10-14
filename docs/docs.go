@@ -60,7 +60,7 @@ var doc = `{
                 }
             }
         },
-        "/notification/subscribe/{url}": {
+        "/notification/subscribe": {
             "post": {
                 "description": "todo",
                 "consumes": [
@@ -78,14 +78,14 @@ var doc = `{
                         "type": "string",
                         "description": "The notification url",
                         "name": "url",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "The id of the customer",
                         "name": "customerId",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],

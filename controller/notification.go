@@ -2,13 +2,8 @@
 package controller
 
 import (
-	//"encoding/json"
 	"fmt"
-	//"github.com/gorilla/mux"
 	"net/http"
-	//"strconv"
-	//"github.com/notification/errorhandler"
-	//"github.com/notification/utils"
 )
 
 // PostNotify godoc
@@ -20,14 +15,12 @@ import (
 // @Success 201
 // @Failure 400 {object} model.HTTPError400
 // @Failure 500 {object} model.HTTPError500
-// @Param url path string true "The notification url"
-// @Param customerId path int true "The id of the customer"
-// @Router /notification/subscribe/{url} [post]
+// @Param url query string true "The notification url"
+// @Param customerId query int true "The id of the customer"
+// @Router /notification/subscribe [post]
 func PostNotify(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("PostNotify called")
 	saveCustomer(w, r)
 	w.WriteHeader(http.StatusCreated)
-	//json.NewEncoder(w).Encode(fetch())
 }
 
 // PostNotifyTest godoc

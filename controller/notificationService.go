@@ -2,13 +2,9 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
-	"strconv"
-	"github.com/notification/db"
+	"github.com/hassahma/notification/db"
 )
 
 // Invalidates the cache by calling flushall
